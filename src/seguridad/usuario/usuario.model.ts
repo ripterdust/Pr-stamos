@@ -11,6 +11,24 @@ export class UsuarioModel extends Model {
                 descripcion: 'Identificador único del usuario',
                 requerido: true,
             },
+            {
+                nombre: 'nombre',
+                descripcion: 'Nombre de usuario',
+                requerido: true,
+            },{
+                nombre: 'correo',
+                descripcion: 'Correo del usuario',
+                requerido: true
+            },{
+                nombre: 'password',
+                descripcion: 'Contraseña del usuario',
+                requerido: true
+            },
+            {
+                nombre: 'rol',
+                descripcion: 'ROl del usuario',
+                requerido: false
+            }
         ]
         this.nombreCampos = this.obtenerCampos()
     }

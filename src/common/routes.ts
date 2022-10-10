@@ -1,5 +1,6 @@
 import { Ruta } from './interfaces/ruta.interface'
 import { Router, Request, Response } from 'express'
+import { rutaUsuario } from '../seguridad/usuario/usuario.router'
 
 const router = Router()
 const endpoint: string = '/'
@@ -16,4 +17,4 @@ router.get('/', (req: Request, res: Response) => {
     })
 })
 
-export const rutas: Ruta[] = [rutasGenerales]
+export const rutas: Ruta[] = [rutasGenerales, rutaUsuario]

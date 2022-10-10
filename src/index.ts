@@ -20,6 +20,8 @@ app.use('*', (req: Request, res: Response) => {
         statusCode: 404,
         message: 'Recurso no encontrado',
     }
+
+    res.status(404).json(respuesta)
 })
 // Listening
 app.listen(app.get('port'), () => console.log(`App running on port ${app.get('port')}`))

@@ -61,7 +61,6 @@ export default class Model {
                 }
 
             const pool = await this.connection.getConnection(this.#nombreConexion)
-
             const resultado = await pool!.insert(registro).into(this.nombreTabla)
 
             return this.responseHandler(resultado)
@@ -169,15 +168,20 @@ export default class Model {
     #errorSql(error: Record<string, any>, cliente: string): string {
         const errores = {
             duplicado: 'No es posible insertar un valor duplicado en la tabla',
+            relacionado: 'No es posible eliminar el registro debido a que hay otros relacionados a este',
+            invalido: 'Nombre de columna inválido',
+            noConexion: 'No fue posible conectar con la base de datos',
         }
         if (cliente === 'mssql') {
             if (error.number === 2627) return errores.duplicado
             if (error.number === 2601) return errores.duplicado
-            if (error.number === 547) return 'No es posible eliminar el registro debido a que hay otros relacionados a este'
-            if (error.number === 207) return 'Nombre de columna inválido'
+            if (error.number === 547) return errores.relacionado
+            if (error.number === 207) return errores.invalido
+            if (error.number === 1045) return 'No es posible conectar con la base de datos'
         }
         if (cliente == 'mysql') {
             if (error.errno === 1062) return errores.duplicado
+            if (error.number === 1045) return errores.noConexion
         }
         return 'Error de base de datos desconocido'
     }

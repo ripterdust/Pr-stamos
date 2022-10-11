@@ -244,6 +244,7 @@ export default class Model {
             invalido: 'Nombre de columna inválido',
             noConexion: 'No fue posible conectar con la base de datos',
             incompletos: 'Campos faltantes o inexistentes',
+            existente: 'Los datos ingresados ya están en la base de datos',
         }
         if (cliente === 'mssql') {
             if (error.number === 2627) return errores.duplicado
@@ -254,7 +255,8 @@ export default class Model {
         }
         if (cliente == 'mysql') {
             if (error.errno === 1062) return errores.duplicado
-            if (error.number === 1045) return errores.noConexion
+            if (error.errno === 1045) return errores.noConexion
+            if (error.errno === 1062) return errores.existente
         }
         return 'Error de base de datos desconocido'
     }

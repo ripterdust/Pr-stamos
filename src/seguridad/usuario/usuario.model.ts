@@ -9,7 +9,7 @@ export class UsuarioModel extends Model {
             {
                 nombre: 'usuario_id',
                 descripcion: 'Identificador único del usuario',
-                requerido: true,
+                requerido: false,
             },
             {
                 nombre: 'nombre',

@@ -158,6 +158,7 @@ export default class Model {
             const existe = typeof registro[campo.nombre] !== 'undefined'
             if (campo.requerido && estricto) {
                 if (!existe) {
+                    // @ts-ignore
                     validaciones.push({
                         criterioInvalidez: `El ${campo.descripcion} es requerido`,
                         valorEsperado: 'No nulo',
@@ -167,6 +168,7 @@ export default class Model {
             if (existe) {
                 if (campo.longitudMaxima) {
                     if (registro[campo.nombre].length > campo.longitudMaxima) {
+                        // @ts-ignore
                         validaciones.push({
                             criterioInvalidez: `La longitud máxima del campo es de ${campo.longitudMaxima}`,
                             valorEsperado: `Cadena con menos de ${campo.longitudMaxima} caracteres`,
@@ -175,6 +177,7 @@ export default class Model {
                 }
                 if (campo.longitudMinima) {
                     if (registro[campo.nombre].length < campo.longitudMinima) {
+                        // @ts-ignore
                         validaciones.push({
                             criterioInvalidez: `La longitud mínima del campo es de ${campo.longitudMinima}`,
                             valorEsperado: `Cadena con más de ${campo.longitudMinima} caracteres`,
@@ -183,6 +186,8 @@ export default class Model {
                 }
                 if (campo.valorMaximo) {
                     if (registro[campo.nombre] > campo.valorMaximo) {
+                        // @ts-ignore
+
                         validaciones.push({
                             criterioInvalidez: `El valor máximo del campo es de ${campo.valorMaximo}`,
                             valorEsperado: `Valor menor o igual a ${campo.valorMaximo}`,
@@ -191,6 +196,8 @@ export default class Model {
                 }
                 if (campo.valorMinimo) {
                     if (registro[campo.nombre] < campo.valorMinimo) {
+                        // @ts-ignore
+
                         validaciones.push({
                             criterioInvalidez: `El valor mínimo del campo es de ${campo.valorMinimo}`,
                             valorEsperado: `Valor mayor o igual a ${campo.valorMinimo}`,
@@ -200,6 +207,7 @@ export default class Model {
                 if (campo.regExp) {
                     const regExp = new RegExp(campo.regExp)
                     if (!regExp.test(registro[campo.nombre])) {
+                        // @ts-ignore
                         validaciones.push({
                             criterioInvalidez: `Este campo debe cumplir con el formato ${campo.regExp}`,
                             valorEsperado: `Cadena de caracteres que cumpla con el formato ${campo.regExp}`,
@@ -208,6 +216,7 @@ export default class Model {
                 }
                 if (campo.fnValidar) {
                     if (!campo.fnValidar(registro[campo.nombre])) {
+                        // @ts-ignore
                         validaciones.push({
                             criterioInvalidez: campo.fnCriterioInvalidez || 'El campo no cumple las condiciones de la función de validadora',
                             valorEsperado: campo.fnValorEsperado || 'Distinto al actual',

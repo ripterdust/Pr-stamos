@@ -82,7 +82,6 @@ export default class UsuarioController extends Controller {
                     valor: correo,
                 },
             ]
-
             return this.modelo.buscar(condicionesUsuario).then((res: any) => {
                 return res.data?.length > 0 ? res.data[0] : {}
             })

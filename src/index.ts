@@ -2,6 +2,9 @@ import express, { Request, Response } from 'express'
 import { Ruta } from './common/interfaces/ruta.interface'
 import { rutas } from './common/routes'
 import { Respuesta } from './common/interfaces/respuesta.interface'
+import cors from 'cors'
+import morgan from 'morgan'
+
 // Initilializations
 const app = express()
 
@@ -11,7 +14,8 @@ app.set('port', process.env.PORT || 8000)
 // Middlewares
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-
+app.use(cors())
+app.use(morgan('tiny'))
 // Routers
 rutas.map((ruta: Ruta) => app.use(ruta.endpoint, ruta.router))
 

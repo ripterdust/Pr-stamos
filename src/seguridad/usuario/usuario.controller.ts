@@ -3,10 +3,11 @@ import Controller from '../../common/controller'
 import Condicion from '../../common/interfaces/condicion.interface'
 import { Respuesta } from '../../common/interfaces/respuesta.interface'
 import { RespuestaToken } from '../../common/interfaces/respuestaToken.interface'
-import { crearToken } from '../../common/utils/auth.util'
+import { crearToken, verificarToken } from '../../common/utils/auth.util'
 import { UsuarioModel } from './usuario.model'
 import * as jwt from 'jsonwebtoken'
 import { Usuario } from '../../common/interfaces/usuario.interface'
+import { atob, insecureDecrypt } from '../../common/utils/crypt.util'
 
 export default class UsuarioController extends Controller {
     modelo!: UsuarioModel
@@ -17,18 +18,40 @@ export default class UsuarioController extends Controller {
     }
 
     public async autenticar(req: Request): Promise<RespuestaToken | Respuesta> {
-        const { mail, password } = req.body
-        const user: Usuario = {
-            mail,
-            password,
+        try {
+            const noAutenticado: Respuesta = {
+                message: 'Usuario no autenticado',
+                statusCode: 400,
+            }
+            let { password } = req.body
+            const { mail } = req.body
+
+            if (password) password = atob(password)
+
+            const usuarioEncontrado = await this.obtenerUsuarioAutenticacion(req)
+
+            if (!usuarioEncontrado || !usuarioEncontrado.hasOwnProperty('usuario_id')) {
+                console.log(usuarioEncontrado)
+                return noAutenticado
+            }
+            const user: Usuario = {
+                mail,
+                password,
+            }
+            const token = await crearToken(user, this.#secreto, 300)
+            return { message: 'Usuario autenticado', statusCode: 200, token }
+        } catch (err) {
+            console.log(err)
+            return {
+                statusCode: 500,
+                message: 'Error en el servidor',
+            }
         }
-        const token = await crearToken(user, this.#secreto, 300)
-        return { message: 'Usuario autenticado', statusCode: 200, token }
     }
 
     public async registrar(req: Request): Promise<RespuestaToken | Respuesta> {
         const resultado = await this.modelo.agregar(req.body)
-
+        console.log(resultado)
         let response: RespuestaToken = {
             ...resultado,
             token: '',
@@ -44,5 +67,51 @@ export default class UsuarioController extends Controller {
         }
 
         return response
+    }
+
+    async obtenerUsuarioAutenticacion(req: Request) {
+        const { usuario, token, app } = req.body
+        let { password } = req.body
+
+        if (!token) {
+            password = atob(password).trim()
+
+            if (usuario == '' || password == '') return false
+
+            const condicionesUsuario: Condicion[] = [
+                {
+                    campo: 'usuario',
+                    valor: usuario,
+                },
+            ]
+
+            return this.modelo.buscar(condicionesUsuario).then((res: any) => {
+                return res.data?.length > 0 ? res.data[0] : {}
+            })
+        } else {
+            const tokenDesencriptado = insecureDecrypt(token, app)
+
+            const tokenVerificado = await verificarToken(tokenDesencriptado).catch((err: any) => {
+                return err
+            })
+
+            if (tokenVerificado.error) return false
+
+            delete tokenVerificado.iat
+            delete tokenVerificado.exp
+            delete tokenVerificado.error
+
+            const payload: Record<string, any> = {}
+
+            for (const k in tokenVerificado) {
+                payload[atob(k)] = atob(tokenVerificado[k])
+            }
+
+            const { usuarioId } = payload
+
+            return await this.modelo.obtenerPorId(usuarioId).then((res: any) => {
+                return res.data?.length > 0 ? res.data[0] : {}
+            })
+        }
     }
 }

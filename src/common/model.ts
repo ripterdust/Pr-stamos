@@ -52,7 +52,7 @@ export default class Model {
 
     public async agregar(registro: Record<string, any>): Promise<Respuesta> {
         try {
-            const invalidos = this.#validarCampos(registro)
+            const invalidos = this.validarCampos(registro)
             if (invalidos.length > 0)
                 return {
                     message: 'Campos inválidos',
@@ -117,7 +117,7 @@ export default class Model {
         }
         return respuesta
     }
-    #validarCampos(registro: Record<string, any>, estricto: boolean = true) {
+    protected validarCampos(registro: Record<string, any>, estricto: boolean = true) {
         const camposInvalidos: any[] = []
 
         this.camposTabla.map((campo: Campo) => {

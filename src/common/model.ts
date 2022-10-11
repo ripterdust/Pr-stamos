@@ -39,11 +39,11 @@ export default class Model {
         }
     }
 
-    public async buscar(condiciones: Condicion[]): Promise<Respuesta> {
+    public async buscar(condiciones: Condicion[], limit = 10): Promise<Respuesta> {
         try {
             const pool = await this.connection.getConnection(this.#nombreConexion)
-            let consulta = pool!.select(this.nombreCampos).from(this.nombreTabla)
-            consulta = this.#agregarCondiciones(condiciones, consulta)
+            let consulta = pool!.select(this.nombreCampos).from(this.nombreTabla).limit(limit)
+            consulta = this.agregarCondiciones(condiciones, consulta)
             return this.responseHandler(await consulta)
         } catch (err) {
             return this.#error(err)
@@ -53,7 +53,6 @@ export default class Model {
     public async agregar(registro: Record<string, any>): Promise<Respuesta> {
         try {
             const invalidos = this.validarCampos(registro)
-            console.log(invalidos)
             if (invalidos.length > 0)
                 return {
                     message: 'Campos inválidos',
@@ -223,8 +222,8 @@ export default class Model {
         return camposInvalidos
     }
 
-    #agregarCondiciones(condiciones: Condicion[], consulta: any) {
-        condiciones.map((condicion: Condicion) => {
+    protected agregarCondiciones(condiciones: Condicion[], consulta: any) {
+        condiciones.forEach((condicion) => {
             if (condicion.operador == 'between') consulta.whereBetween(condicion.campo, [condicion.valor, condicion.valorComparacion])
             else consulta.where(condicion.campo, condicion.operador || '=', condicion.valor)
         })

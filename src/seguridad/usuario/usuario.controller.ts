@@ -24,18 +24,16 @@ export default class UsuarioController extends Controller {
                 statusCode: 400,
             }
             let { password } = req.body
-            const { mail } = req.body
+            const { correo } = req.body
 
             if (password) password = atob(password)
 
             const usuarioEncontrado = await this.obtenerUsuarioAutenticacion(req)
-
             if (!usuarioEncontrado || !usuarioEncontrado.hasOwnProperty('usuario_id')) {
-                console.log(usuarioEncontrado)
                 return noAutenticado
             }
             const user: Usuario = {
-                mail,
+                correo,
                 password,
             }
             const token = await crearToken(user, this.#secreto, 300)
@@ -50,7 +48,7 @@ export default class UsuarioController extends Controller {
     }
 
     public async registrar(req: Request): Promise<RespuestaToken | Respuesta> {
-        const resultado = await this.modelo.agregar(req.body)
+        const resultado = await this.modelo.agregarAutenticar(req)
         let response: RespuestaToken = {
             ...resultado,
             token: '',
@@ -60,8 +58,8 @@ export default class UsuarioController extends Controller {
 
         if (resultado.statusCode != 500) {
             if (resultado.statusCode === 400) return resultado
-            const { mail, password } = req.body
-            const user: Usuario = { mail, password }
+            const { correo, password } = req.body
+            const user: Usuario = { correo, password }
             const token = await crearToken(user, this.#secreto, 300)
             response.token = token
         }
@@ -70,18 +68,18 @@ export default class UsuarioController extends Controller {
     }
 
     async obtenerUsuarioAutenticacion(req: Request) {
-        const { usuario, token, app } = req.body
+        const { correo, token, app } = req.body
         let { password } = req.body
 
         if (!token) {
             password = atob(password).trim()
 
-            if (usuario == '' || password == '') return false
+            if (correo == '' || password == '') return false
 
             const condicionesUsuario: Condicion[] = [
                 {
-                    campo: 'usuario',
-                    valor: usuario,
+                    campo: 'correo',
+                    valor: correo,
                 },
             ]
 

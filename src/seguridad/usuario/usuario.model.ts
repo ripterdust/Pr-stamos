@@ -1,4 +1,6 @@
+import { Request } from 'express'
 import Model from '../../common/model'
+import { atob } from '../../common/utils/crypt.util'
 
 export class UsuarioModel extends Model {
     constructor() {
@@ -33,5 +35,11 @@ export class UsuarioModel extends Model {
             },
         ]
         this.nombreCampos = this.obtenerCampos()
+    }
+
+    public async agregarAutenticar(req: Request) {
+        req.body.password = atob(req.body.password)
+
+        return this.agregar(req.body)
     }
 }

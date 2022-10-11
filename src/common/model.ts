@@ -53,6 +53,7 @@ export default class Model {
     public async agregar(registro: Record<string, any>): Promise<Respuesta> {
         try {
             const invalidos = this.validarCampos(registro)
+            console.log(invalidos)
             if (invalidos.length > 0)
                 return {
                     message: 'Campos inválidos',
@@ -116,38 +117,109 @@ export default class Model {
         }
         return respuesta
     }
+    // protected validarCampos(registro: Record<string, any>, estricto: boolean = true) {
+    //     const camposInvalidos: any[] = []
+
+    //     this.camposTabla.map((campo: Campo) => {
+    //         const validaciones: any[] = []
+    //         const existe = typeof registro[campo.nombre] !== 'undefined'
+    //         if (campo.requerido && estricto) {
+    //             if (!existe) {
+    //                 validaciones.push({
+    //                     mensaje: `El campo -${campo.nombre}- es requerido`,
+    //                 })
+    //             }
+
+    //             if (existe) {
+    //                 if (campo.longitudMaxima) {
+    //                     if (registro[campo.nombre].length > campo.longitudMaxima) {
+    //                         validaciones.push({
+    //                             mensaje: `La longitud máxima del campo -${campo.nombre}- es de ${campo.longitudMaxima}`,
+    //                         })
+    //                     }
+    //                 }
+    //                 if (campo.longitudMinima) {
+    //                     if (registro[campo.nombre].length > campo.longitudMinima) {
+    //                         validaciones.push({
+    //                             mensaje: `La longitud Mínima del campo -${campo.nombre}- es de ${campo.longitudMinima}`,
+    //                         })
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     })
+
+    //     return camposInvalidos
+    // }
+
     protected validarCampos(registro: Record<string, any>, estricto: boolean = true) {
         const camposInvalidos: any[] = []
-
-        this.camposTabla.map((campo: Campo) => {
-            const validaciones: any[] = []
+        this.camposTabla.forEach((campo) => {
+            const validaciones = []
             const existe = typeof registro[campo.nombre] !== 'undefined'
             if (campo.requerido && estricto) {
                 if (!existe) {
                     validaciones.push({
-                        mensaje: `El campo -${campo.nombre}- es requerido`,
+                        criterioInvalidez: `El ${campo.descripcion} es requerido`,
+                        valorEsperado: 'No nulo',
                     })
                 }
-
-                if (existe) {
-                    if (campo.longitudMaxima) {
-                        if (registro[campo.nombre].length > campo.longitudMaxima) {
-                            validaciones.push({
-                                mensaje: `La longitud máxima del campo -${campo.nombre}- es de ${campo.longitudMaxima}`,
-                            })
-                        }
+            }
+            if (existe) {
+                if (campo.longitudMaxima) {
+                    if (registro[campo.nombre].length > campo.longitudMaxima) {
+                        validaciones.push({
+                            criterioInvalidez: `La longitud máxima del campo es de ${campo.longitudMaxima}`,
+                            valorEsperado: `Cadena con menos de ${campo.longitudMaxima} caracteres`,
+                        })
                     }
-                    if (campo.longitudMinima) {
-                        if (registro[campo.nombre].length > campo.longitudMinima) {
-                            validaciones.push({
-                                mensaje: `La longitud Mínima del campo -${campo.nombre}- es de ${campo.longitudMinima}`,
-                            })
-                        }
+                }
+                if (campo.longitudMinima) {
+                    if (registro[campo.nombre].length < campo.longitudMinima) {
+                        validaciones.push({
+                            criterioInvalidez: `La longitud mínima del campo es de ${campo.longitudMinima}`,
+                            valorEsperado: `Cadena con más de ${campo.longitudMinima} caracteres`,
+                        })
+                    }
+                }
+                if (campo.valorMaximo) {
+                    if (registro[campo.nombre] > campo.valorMaximo) {
+                        validaciones.push({
+                            criterioInvalidez: `El valor máximo del campo es de ${campo.valorMaximo}`,
+                            valorEsperado: `Valor menor o igual a ${campo.valorMaximo}`,
+                        })
+                    }
+                }
+                if (campo.valorMinimo) {
+                    if (registro[campo.nombre] < campo.valorMinimo) {
+                        validaciones.push({
+                            criterioInvalidez: `El valor mínimo del campo es de ${campo.valorMinimo}`,
+                            valorEsperado: `Valor mayor o igual a ${campo.valorMinimo}`,
+                        })
+                    }
+                }
+                if (campo.regExp) {
+                    const regExp = new RegExp(campo.regExp)
+                    if (!regExp.test(registro[campo.nombre])) {
+                        validaciones.push({
+                            criterioInvalidez: `Este campo debe cumplir con el formato ${campo.regExp}`,
+                            valorEsperado: `Cadena de caracteres que cumpla con el formato ${campo.regExp}`,
+                        })
+                    }
+                }
+                if (campo.fnValidar) {
+                    if (!campo.fnValidar(registro[campo.nombre])) {
+                        validaciones.push({
+                            criterioInvalidez: campo.fnCriterioInvalidez || 'El campo no cumple las condiciones de la función de validadora',
+                            valorEsperado: campo.fnValorEsperado || 'Distinto al actual',
+                        })
                     }
                 }
             }
+            if (validaciones.length > 0) {
+                camposInvalidos.push({ campo: campo.nombre, validaciones })
+            }
         })
-
         return camposInvalidos
     }
 
@@ -171,6 +243,7 @@ export default class Model {
             relacionado: 'No es posible eliminar el registro debido a que hay otros relacionados a este',
             invalido: 'Nombre de columna inválido',
             noConexion: 'No fue posible conectar con la base de datos',
+            incompletos: 'Campos faltantes o inexistentes',
         }
         if (cliente === 'mssql') {
             if (error.number === 2627) return errores.duplicado

@@ -51,7 +51,6 @@ export default class UsuarioController extends Controller {
 
     public async registrar(req: Request): Promise<RespuestaToken | Respuesta> {
         const resultado = await this.modelo.agregar(req.body)
-        console.log(resultado)
         let response: RespuestaToken = {
             ...resultado,
             token: '',
@@ -60,6 +59,7 @@ export default class UsuarioController extends Controller {
         delete response.data
 
         if (resultado.statusCode != 500) {
+            if (resultado.statusCode === 400) return resultado
             const { mail, password } = req.body
             const user: Usuario = { mail, password }
             const token = await crearToken(user, this.#secreto, 300)

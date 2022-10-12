@@ -8,7 +8,7 @@ export const verificarToken = (req: Request, res: Response, next: NextFunction) 
         const token = bearerHeader?.split(' ')[1]
         // @ts-ignore
         req.token = token
-
+        // @ts-ignore
         return next()
     }
 
@@ -18,9 +18,11 @@ export const verificarToken = (req: Request, res: Response, next: NextFunction) 
 
 export const verificaAutenticacion = (req: Request, res: Response, next: NextFunction) => {
     // @ts-ignore
+    console.log(req.token)
+    // @ts-ignore
     jwt.verify(req.token, 'Secreto', (err: any, authData: any) => {
         if (err) {
-            const respuesta: Respuesta = { statusCode: 403, message: 'Usuario no autenticado' }
+            const respuesta: Respuesta = { statusCode: 403, message: 'Sesión experidada' }
             return res.status(respuesta.statusCode).json(respuesta)
         }
         return next()

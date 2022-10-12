@@ -30,4 +30,8 @@ export default class Controller {
             }
         return await this.modelo.eliminarPorId(id)
     }
+
+    public async agregar(req: Request): Promise<Respuesta> {
+        return await this.modelo.agregar(req.body)
+    }
 }

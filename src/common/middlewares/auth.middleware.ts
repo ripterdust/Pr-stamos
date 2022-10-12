@@ -11,7 +11,6 @@ export const verificarToken = (req: Request, res: Response, next: NextFunction) 
         // @ts-ignore
         return next()
     }
-
     const response: Respuesta = { message: 'Usuario no autenticado', statusCode: 403 }
     return res.status(response.statusCode).json(response)
 }

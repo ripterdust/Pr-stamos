@@ -125,40 +125,6 @@ export default class Model {
         }
         return respuesta
     }
-    // protected validarCampos(registro: Record<string, any>, estricto: boolean = true) {
-    //     const camposInvalidos: any[] = []
-
-    //     this.camposTabla.map((campo: Campo) => {
-    //         const validaciones: any[] = []
-    //         const existe = typeof registro[campo.nombre] !== 'undefined'
-    //         if (campo.requerido && estricto) {
-    //             if (!existe) {
-    //                 validaciones.push({
-    //                     mensaje: `El campo -${campo.nombre}- es requerido`,
-    //                 })
-    //             }
-
-    //             if (existe) {
-    //                 if (campo.longitudMaxima) {
-    //                     if (registro[campo.nombre].length > campo.longitudMaxima) {
-    //                         validaciones.push({
-    //                             mensaje: `La longitud máxima del campo -${campo.nombre}- es de ${campo.longitudMaxima}`,
-    //                         })
-    //                     }
-    //                 }
-    //                 if (campo.longitudMinima) {
-    //                     if (registro[campo.nombre].length > campo.longitudMinima) {
-    //                         validaciones.push({
-    //                             mensaje: `La longitud Mínima del campo -${campo.nombre}- es de ${campo.longitudMinima}`,
-    //                         })
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     })
-
-    //     return camposInvalidos
-    // }
 
     protected validarCampos(registro: Record<string, any>, estricto: boolean = true) {
         const camposInvalidos: any[] = []
@@ -262,6 +228,7 @@ export default class Model {
             noConexion: 'No fue posible conectar con la base de datos',
             incompletos: 'Campos faltantes o inexistentes',
             existente: 'Los datos ingresados ya están en la base de datos',
+            faltante: 'Campos faltantes o inválidos',
         }
         if (cliente === 'mssql') {
             if (error.number === 2627) return errores.duplicado
@@ -274,6 +241,7 @@ export default class Model {
             if (error.errno === 1062) return errores.duplicado
             if (error.errno === 1045) return errores.noConexion
             if (error.errno === 1062) return errores.existente
+            if (error.errno === 1364) return errores.faltante
         }
         return 'Error de base de datos desconocido'
     }

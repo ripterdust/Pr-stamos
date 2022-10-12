@@ -29,7 +29,6 @@ export default class UsuarioController extends Controller {
             if (password) password = atob(password)
 
             const usuarioEncontrado = await this.obtenerUsuarioAutenticacion(req)
-            console.log(usuarioEncontrado)
             if (!usuarioEncontrado || !usuarioEncontrado.hasOwnProperty('usuario_id')) {
                 return noAutenticado
             }

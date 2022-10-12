@@ -19,4 +19,15 @@ export default class Controller {
 
         return await this.modelo.obtenerPorId(id)
     }
+
+    public async eliminarPorId(req: Request): Promise<Respuesta> {
+        const id = parseInt(req.params.id)
+        if (isNaN(id))
+            return {
+                message: 'Ocurrió un error',
+                statusCode: 400,
+                errorMessage: 'El parámetro id, espera un número',
+            }
+        return await this.modelo.eliminarPorId(id)
+    }
 }

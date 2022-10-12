@@ -68,6 +68,15 @@ export default class Model {
             return this.#error(err)
         }
     }
+    async eliminarPorId(id: number, organizacionSk: number = 0): Promise<Respuesta> {
+        try {
+            const pool = await this.connection.getConnection(this.#nombreConexion)
+            const resultado = await pool!.del().from(this.nombreTabla).where(this.idTabla, id)
+            return this.responseHandler([resultado], 'del')
+        } catch (err: any) {
+            return this.#error(err)
+        }
+    }
     // Métodos privados del modelo
     protected obtenerCampos(): string[] {
         const campos: string[] = this.camposTabla.map((campo: Campo) => campo.nombre)

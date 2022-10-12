@@ -13,4 +13,7 @@ router.get('/', async (req: Request, res: Response) => {
     res.status(response.statusCode).json(response)
 })
 
+router.delete('/:id', async (req: Request, res: Response) => {
+    const response = await controller.eliminarPorId(req)
+})
 export const usuariosRuta: Ruta = { router, endpoint }

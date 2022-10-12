@@ -3,4 +3,5 @@ export interface Respuesta {
     message: string
     data?: any
     errorDetails?: any[]
+    errorMessage?: string
 }

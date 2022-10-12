@@ -39,7 +39,6 @@ export default class UsuarioController extends Controller {
             const token = await crearToken(user, this.#secreto, 300)
             return { message: 'Usuario autenticado', statusCode: 200, token }
         } catch (err) {
-            console.log(err)
             return {
                 statusCode: 500,
                 message: 'Error en el servidor',

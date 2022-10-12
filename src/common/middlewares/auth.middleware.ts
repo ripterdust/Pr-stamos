@@ -18,8 +18,6 @@ export const verificarToken = (req: Request, res: Response, next: NextFunction) 
 
 export const verificaAutenticacion = (req: Request, res: Response, next: NextFunction) => {
     // @ts-ignore
-    console.log(req.token)
-    // @ts-ignore
     jwt.verify(req.token, 'Secreto', (err: any, authData: any) => {
         if (err) {
             const respuesta: Respuesta = { statusCode: 403, message: 'Sesión experidada' }

@@ -29,12 +29,14 @@ export default class UsuarioController extends Controller {
             if (password) password = atob(password)
 
             const usuarioEncontrado = await this.obtenerUsuarioAutenticacion(req)
+            console.log(usuarioEncontrado)
             if (!usuarioEncontrado || !usuarioEncontrado.hasOwnProperty('usuario_id')) {
                 return noAutenticado
             }
             const user: Usuario = {
                 correo,
                 password,
+                rol: usuarioEncontrado.rol,
             }
             const token = await crearToken(user, this.#secreto, 300)
             return { message: 'Usuario autenticado', statusCode: 200, token }

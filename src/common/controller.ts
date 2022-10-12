@@ -34,4 +34,8 @@ export default class Controller {
     public async agregar(req: Request): Promise<Respuesta> {
         return await this.modelo.agregar(req.body)
     }
+    public async actualizarPorId(req: Request): Promise<Respuesta> {
+        const id = parseInt(req.params.id)
+        return await this.modelo.actualizarPorId(id, req.body)
+    }
 }

@@ -77,6 +77,26 @@ export default class Model {
             return this.#error(err)
         }
     }
+
+    async actualizarPorId(id: number, registro: Record<string, any>): Promise<Respuesta> {
+        try {
+            const invalidos = this.validarCampos(registro, false)
+            if (invalidos.length !== 0)
+                return {
+                    message: 'Campos Inválidos',
+                    statusCode: 400,
+                    errorMessage: 'La estructura del registro no cumple los requisitos mínimos',
+                    errorDetails: invalidos,
+                }
+
+            const pool = await this.connection.getConnection(this.#nombreConexion)
+
+            const resultado = await pool!.update(registro).from(`${this.nombreTabla}`).where(this.idTabla, id).returning(this.nombreCampos)
+            return this.responseHandler(resultado)
+        } catch (err: any) {
+            return this.#error(err)
+        }
+    }
     // Métodos privados del modelo
     protected obtenerCampos(): string[] {
         const campos: string[] = this.camposTabla.map((campo: Campo) => campo.nombre)

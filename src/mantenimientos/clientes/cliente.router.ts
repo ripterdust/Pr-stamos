@@ -15,7 +15,6 @@ router.get('/', async (req: Request, res: Response) => {
 })
 
 router.post('/', async (req: Request, res: Response) => {
-    req.body.password = atob(req.body.password)
     const response = await controller.agregar(req)
     return res.status(response.statusCode).json(response)
 })

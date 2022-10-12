@@ -25,7 +25,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     return res.status(response.statusCode).json(response)
 })
 
-router.post('/editar/:id', async (req: Request, res: Response) => {
+router.post('/edit/:id', async (req: Request, res: Response) => {
     const response = await controller.actualizarPorId(req)
     return res.status(response.statusCode).json(response)
 })

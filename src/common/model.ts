@@ -262,6 +262,7 @@ export default class Model {
             if (error.errno === 1045) return errores.noConexion
             if (error.errno === 1062) return errores.existente
             if (error.errno === 1364) return errores.faltante
+            if (error.errno === 1452) return errores.faltante
         }
         return 'Error de base de datos desconocido'
     }

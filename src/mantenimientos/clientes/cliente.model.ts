@@ -3,7 +3,7 @@ import Model from '../../common/model'
 export class ClienteModel extends Model {
     constructor() {
         super()
-        this.nombreTabla = 'usuarios'
+        this.nombreTabla = 'clientes'
         this.idTabla = 'cliente_id'
         this.camposTabla = [
             {

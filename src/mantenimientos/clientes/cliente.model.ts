@@ -27,6 +27,11 @@ export class ClienteModel extends Model {
                 requerido: true,
             },
             {
+                nombre: 'identificacion',
+                descripcion: 'Número de identificación',
+                requerido: true,
+            },
+            {
                 nombre: 'prestamista_id',
                 descripcion: 'Identificador del prestamista',
                 requerido: true,

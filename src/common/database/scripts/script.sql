@@ -24,6 +24,7 @@ create table clientes(
     nombre              varchar(200) not null,
     correo              varchar(200) not null unique,
     telefono            varchar(10) not null, 
+    identificacion      varchar(50) not null,
     prestamista_id      int not null,
 
     foreign key (prestamista_id) references usuarios(usuario_id)

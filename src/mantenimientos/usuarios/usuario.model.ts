@@ -4,7 +4,6 @@ export class UsuarioMantenimientoModel extends Model {
     constructor() {
         super()
         this.nombreTabla = 'usuarios'
-        this.nombreCampos = this.obtenerCampos()
         this.idTabla = 'usuario_id'
         this.camposTabla = [
             {
@@ -28,5 +27,6 @@ export class UsuarioMantenimientoModel extends Model {
                 requerido: true,
             },
         ]
+        this.nombreCampos = this.obtenerCampos()
     }
 }

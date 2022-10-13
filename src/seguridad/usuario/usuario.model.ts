@@ -43,7 +43,9 @@ export class UsuarioModel extends Model {
         if (respuesta.statusCode != 200) {
             return respuesta
         }
-        req.body.rol = 1
+        const total = await this.obtenerTotalRegistros()
+        req.body.rol = total.data[0].totalRegistros >= 1 ? 2 : 1
+
         return this.agregar(req.body)
     }
 }

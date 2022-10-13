@@ -29,6 +29,16 @@ export default class Model {
         }
     }
 
+    public async obtenerTotalRegistros(): Promise<Respuesta> {
+        try {
+            const pool = await this.connection.getConnection(this.#nombreConexion)
+            const consulta = pool!.count('* as totalRegistros').from(this.nombreTabla)
+            return this.responseHandler(await consulta)
+        } catch (err) {
+            return this.#error(err)
+        }
+    }
+
     public async obtenerPorId(id: number): Promise<Respuesta> {
         try {
             const pool = await this.connection.getConnection(this.#nombreConexion)
@@ -104,7 +114,10 @@ export default class Model {
             const pool = await this.connection.getConnection(this.#nombreConexion)
             const { totalRegistros } = parseToJson(await pool!.count('* as totalRegistros').from('roles'))[0]
             if (totalRegistros === 0) {
-                const consulta = pool!.insert({ nombre: 'Administrador' }).into('roles').returning('rol_id')
+                const consulta = pool!
+                    .insert([{ nombre: 'Administrador' }, { nombre: 'Cajero' }])
+                    .into('roles')
+                    .returning('rol_id')
                 return this.responseHandler(await consulta)
             }
 

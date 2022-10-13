@@ -3,17 +3,22 @@ import Model from '../../common/model'
 export class OpcionesMenuModel extends Model {
     constructor() {
         super()
-        this.nombreTabla = 'roles'
-        this.idTabla = 'rol_id'
+        this.nombreTabla = 'opciones_menu'
+        this.idTabla = 'opcion_id'
         this.camposTabla = [
             {
                 nombre: this.idTabla,
-                descripcion: 'Identificador del rol',
+                descripcion: 'Identificador de la opción de menú',
                 requerido: false,
             },
             {
                 nombre: 'nombre',
-                descripcion: 'Nombre del rol',
+                descripcion: 'Nombre de la opción',
+                requerido: true,
+            },
+            {
+                nombre: 'rol_id',
+                descripcion: 'Identificador del rol',
                 requerido: true,
             },
         ]

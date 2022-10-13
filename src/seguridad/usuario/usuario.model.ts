@@ -39,7 +39,11 @@ export class UsuarioModel extends Model {
 
     public async agregarAutenticar(req: Request) {
         req.body.password = atob(req.body.password)
-
+        const respuesta = await this.setupInicial()
+        if (respuesta.statusCode != 200) {
+            return respuesta
+        }
+        req.body.rol = 1
         return this.agregar(req.body)
     }
 }

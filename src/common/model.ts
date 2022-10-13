@@ -3,6 +3,7 @@ import { connection } from './database/connection'
 import { Campo } from './interfaces/campo.interface'
 import Condicion from './interfaces/condicion.interface'
 import { Respuesta } from './interfaces/respuesta.interface'
+import { parseToJson } from './utils/transform.util'
 
 export default class Model {
     idTabla: string
@@ -94,6 +95,24 @@ export default class Model {
             const resultado = await pool!.update(registro).from(`${this.nombreTabla}`).where(this.idTabla, id).returning(this.nombreCampos)
             return this.responseHandler(resultado)
         } catch (err: any) {
+            return this.#error(err)
+        }
+    }
+
+    async setupInicial(): Promise<any> {
+        try {
+            const pool = await this.connection.getConnection(this.#nombreConexion)
+            const { totalRegistros } = parseToJson(await pool!.count('* as totalRegistros').from('roles'))[0]
+            if (totalRegistros === 0) {
+                const consulta = pool!.insert({ nombre: 'Administrador' }).into('roles').returning('rol_id')
+                return this.responseHandler(await consulta)
+            }
+
+            return {
+                statusCode: 200,
+                message: 'No se creaon registros',
+            }
+        } catch (err) {
             return this.#error(err)
         }
     }

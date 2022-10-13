@@ -1,11 +1,11 @@
 import { Request, Response, Router } from 'express'
 import { Ruta } from '../../common/interfaces/ruta.interface'
 import { verificaAutenticacion, verificarToken } from '../../common/middlewares/auth.middleware'
-import { RolController } from './rol.controller'
+import { OpcionesMenuController } from './opcionesMenu.controller'
 
 const router = Router()
-const endpoint = '/roles'
-const controller = new RolController()
+const endpoint = '/opcionesMenu'
+const controller = new OpcionesMenuController()
 router.all('*', verificarToken, verificaAutenticacion)
 
 router.get('/', async (req: Request, res: Response) => {
@@ -31,4 +31,4 @@ router.delete('/:id', async (req: Request, res: Response) => {
     const response = await controller.eliminarPorId(req)
     return res.status(response.statusCode).json(response)
 })
-export const rolesRuta: Ruta = { router, endpoint }
+export const opcionesMenuRuta: Ruta = { router, endpoint }

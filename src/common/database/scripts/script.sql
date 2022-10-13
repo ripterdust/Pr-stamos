@@ -7,6 +7,15 @@ create table roles (
     nombre                  varchar(200) not null unique 
 );
 
+create table opciones_menu (
+    opcion_id               int not null primary key auto_increment,
+    nombre                  varchar(200) not null,
+    rol_id                  int not null,
+
+    foreign key (rol_id) references roles(rol_id)
+
+);
+
 create table usuarios(
     usuario_id          int not null primary key auto_increment,
     nombre              varchar(200) not null,

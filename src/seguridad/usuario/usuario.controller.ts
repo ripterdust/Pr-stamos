@@ -19,8 +19,8 @@ export default class UsuarioController extends Controller {
 
     public async autenticar(req: Request): Promise<RespuestaToken | Respuesta> {
         try {
-            const noAutenticado: Respuesta = {
-                message: 'Usuario no autenticado',
+            let noAutenticado: Respuesta = {
+                message: 'Usuario o contraseña incorrectos',
                 statusCode: 400,
             }
             let { password } = req.body
@@ -30,6 +30,10 @@ export default class UsuarioController extends Controller {
 
             const usuarioEncontrado = await this.obtenerUsuarioAutenticacion(req)
             if (!usuarioEncontrado || !usuarioEncontrado.hasOwnProperty('usuario_id')) {
+                return noAutenticado
+            }
+
+            if (usuarioEncontrado.password != password) {
                 return noAutenticado
             }
             const user: Usuario = {

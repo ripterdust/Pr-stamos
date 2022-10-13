@@ -32,7 +32,6 @@ export default class UsuarioController extends Controller {
             if (!usuarioEncontrado || !usuarioEncontrado.hasOwnProperty('usuario_id')) {
                 return noAutenticado
             }
-            console.log(usuarioEncontrado)
             const user: Usuario = {
                 correo,
                 password,

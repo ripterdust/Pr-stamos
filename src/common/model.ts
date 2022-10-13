@@ -242,13 +242,13 @@ export default class Model {
 
     #errorSql(error: Record<string, any>, cliente: string): string {
         const errores = {
-            duplicado: 'No es posible insertar un valor duplicado en la tabla',
-            relacionado: 'No es posible eliminar el registro debido a que hay otros relacionados a este',
-            invalido: 'Nombre de columna inválido',
-            noConexion: 'No fue posible conectar con la base de datos',
-            incompletos: 'Campos faltantes o inexistentes',
-            existente: 'Los datos ingresados ya están en la base de datos',
-            faltante: 'Campos faltantes o inválidos',
+            duplicado: 'No es posible insertar un valor duplicado en la tabla.',
+            relacionado: 'No es posible eliminar el registro debido a que hay otros relacionados a este.',
+            invalido: 'Nombre de columna inválido.',
+            noConexion: 'No fue posible conectar con la base de datos.',
+            incompletos: 'Campos faltantes o inexistentes.',
+            existente: 'Los datos ingresados ya están en la base de datos.',
+            faltante: 'Campos faltantes o inválidos.',
         }
         if (cliente === 'mssql') {
             if (error.number === 2627) return errores.duplicado

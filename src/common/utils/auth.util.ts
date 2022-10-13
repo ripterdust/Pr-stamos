@@ -19,7 +19,16 @@ export const obtenerUsuarioId = async (req: Request) => {
     const usuario = await verificarToken(token).catch((err) => {
         return err
     })
-    console.log(usuario)
     if (typeof usuario != 'string' && usuario.id) return parseInt(usuario.id)
+    return 0
+}
+
+export const obtenerUsuarioRol = async (req: Request) => {
+    // @ts-ignore
+    const token = req.header('Authorization')?.split(' ')[1] || ' '
+    const usuario = await verificarToken(token).catch((err) => {
+        return err
+    })
+    if (typeof usuario != 'string' && usuario.rol) return parseInt(usuario.rol)
     return 0
 }

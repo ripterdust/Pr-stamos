@@ -11,9 +11,9 @@ export default class Model {
     nombreTabla: string = ''
     camposTabla: Campo[]
     connection = connection
-    #nombreConexion: string
+    nombreConexion: string
     constructor() {
-        this.#nombreConexion = ''
+        this.nombreConexion = ''
         this.idTabla = ''
         this.nombreTabla = ''
         this.camposTabla = []
@@ -21,43 +21,43 @@ export default class Model {
 
     public async obtieneTodos(): Promise<Respuesta> {
         try {
-            const pool = await this.connection.getConnection(this.#nombreConexion)
+            const pool = await this.connection.getConnection(this.nombreConexion)
             const consulta = pool!.select(this.nombreCampos).from(this.nombreTabla)
             return this.responseHandler(await consulta)
         } catch (err) {
-            return this.#error(err)
+            return this.error(err)
         }
     }
 
     public async obtenerTotalRegistros(): Promise<Respuesta> {
         try {
-            const pool = await this.connection.getConnection(this.#nombreConexion)
+            const pool = await this.connection.getConnection(this.nombreConexion)
             const consulta = pool!.count('* as totalRegistros').from(this.nombreTabla)
             return this.responseHandler(await consulta)
         } catch (err) {
-            return this.#error(err)
+            return this.error(err)
         }
     }
 
     public async obtenerPorId(id: number): Promise<Respuesta> {
         try {
-            const pool = await this.connection.getConnection(this.#nombreConexion)
+            const pool = await this.connection.getConnection(this.nombreConexion)
             const consulta = pool!.select(this.nombreCampos).from(this.nombreTabla).where(this.idTabla, id)
 
             return this.responseHandler(await consulta)
         } catch (err) {
-            return this.#error(err)
+            return this.error(err)
         }
     }
 
     public async buscar(condiciones: Condicion[], limit = 10): Promise<Respuesta> {
         try {
-            const pool = await this.connection.getConnection(this.#nombreConexion)
+            const pool = await this.connection.getConnection(this.nombreConexion)
             let consulta = pool!.select(this.nombreCampos).from(this.nombreTabla).limit(limit)
             consulta = this.agregarCondiciones(condiciones, consulta)
             return this.responseHandler(await consulta)
         } catch (err) {
-            return this.#error(err)
+            return this.error(err)
         }
     }
 
@@ -71,21 +71,21 @@ export default class Model {
                     errorDetails: invalidos,
                 }
 
-            const pool = await this.connection.getConnection(this.#nombreConexion)
+            const pool = await this.connection.getConnection(this.nombreConexion)
             const resultado = await pool!.insert(registro).into(this.nombreTabla)
 
             return this.responseHandler(resultado)
         } catch (err) {
-            return this.#error(err)
+            return this.error(err)
         }
     }
     async eliminarPorId(id: number, organizacionSk: number = 0): Promise<Respuesta> {
         try {
-            const pool = await this.connection.getConnection(this.#nombreConexion)
+            const pool = await this.connection.getConnection(this.nombreConexion)
             const resultado = await pool!.del().from(this.nombreTabla).where(this.idTabla, id)
             return this.responseHandler([resultado], 'del')
         } catch (err: any) {
-            return this.#error(err)
+            return this.error(err)
         }
     }
 
@@ -100,18 +100,18 @@ export default class Model {
                     errorDetails: invalidos,
                 }
 
-            const pool = await this.connection.getConnection(this.#nombreConexion)
+            const pool = await this.connection.getConnection(this.nombreConexion)
 
             const resultado = await pool!.update(registro).from(`${this.nombreTabla}`).where(this.idTabla, id).returning(this.nombreCampos)
             return this.responseHandler(resultado)
         } catch (err: any) {
-            return this.#error(err)
+            return this.error(err)
         }
     }
 
     async setupInicial(): Promise<any> {
         try {
-            const pool = await this.connection.getConnection(this.#nombreConexion)
+            const pool = await this.connection.getConnection(this.nombreConexion)
             const { totalRegistros } = parseToJson(await pool!.count('* as totalRegistros').from('roles'))[0]
             if (totalRegistros === 0) {
                 const consulta = pool!
@@ -126,7 +126,7 @@ export default class Model {
                 message: 'No se creaon registros',
             }
         } catch (err) {
-            return this.#error(err)
+            return this.error(err)
         }
     }
     // Métodos privados del modelo
@@ -266,13 +266,13 @@ export default class Model {
         return consulta
     }
 
-    #error(err: any): Respuesta {
+    protected error(err: any): Respuesta {
         const statusCode: number = 500
-        const message: string = this.#errorSql(err, 'mysql')
+        const message: string = this.errorSql(err, 'mysql')
         return { statusCode, message }
     }
 
-    #errorSql(error: Record<string, any>, cliente: string): string {
+    protected errorSql(error: Record<string, any>, cliente: string): string {
         const errores = {
             duplicado: 'No es posible insertar un valor duplicado en la tabla.',
             relacionado: 'No es posible eliminar el registro debido a que hay otros relacionados a este.',

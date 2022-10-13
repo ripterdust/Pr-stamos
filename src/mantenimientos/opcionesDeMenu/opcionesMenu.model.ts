@@ -1,10 +1,13 @@
+import { Respuesta } from '../../common/interfaces/respuesta.interface'
 import Model from '../../common/model'
 
 export class OpcionesMenuModel extends Model {
+    nombreOpcion: string
     constructor() {
         super()
         this.nombreTabla = 'opciones_menu'
         this.idTabla = 'opcion_id'
+        this.nombreOpcion = 'nombre'
         this.camposTabla = [
             {
                 nombre: this.idTabla,
@@ -12,7 +15,7 @@ export class OpcionesMenuModel extends Model {
                 requerido: false,
             },
             {
-                nombre: 'nombre',
+                nombre: this.nombreOpcion,
                 descripcion: 'Nombre de la opción',
                 requerido: true,
             },
@@ -23,5 +26,16 @@ export class OpcionesMenuModel extends Model {
             },
         ]
         this.nombreCampos = this.obtenerCampos()
+    }
+    public async obtenerOpciones(rolId: number): Promise<Respuesta> {
+        try {
+            console.log('opciones')
+            const pool = await this.connection.getConnection(this.nombreConexion)
+            const consulta = pool!.select(this.nombreOpcion).from(this.nombreTabla).where('rol_id', rolId)
+            return this.responseHandler(await consulta)
+        } catch (err) {
+            console.log('error')
+            return this.error(err)
+        }
     }
 }

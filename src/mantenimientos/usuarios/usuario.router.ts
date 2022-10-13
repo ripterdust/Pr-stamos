@@ -26,6 +26,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 })
 
 router.post('/edit/:id', async (req: Request, res: Response) => {
+    req.body.password = atob(req.body.password)
     const response = await controller.actualizarPorId(req)
     return res.status(response.statusCode).json(response)
 })

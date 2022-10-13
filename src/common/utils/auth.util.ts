@@ -1,3 +1,4 @@
+import { Request } from 'express'
 import * as jwt from 'jsonwebtoken'
 import { Usuario } from '../interfaces/usuario.interface'
 
@@ -10,4 +11,15 @@ export const verificarToken = (token: string) => {
             if (typeof payload !== 'undefined' && typeof payload !== 'string') return resolve({ ...payload, error: false })
         })
     })
+}
+
+export const obtenerUsuarioId = async (req: Request) => {
+    // @ts-ignore
+    const token = req.header('Authorization')?.split(' ')[1] || ' '
+    const usuario = await verificarToken(token).catch((err) => {
+        return err
+    })
+    console.log(usuario)
+    if (typeof usuario != 'string' && usuario.id) return parseInt(usuario.id)
+    return 0
 }

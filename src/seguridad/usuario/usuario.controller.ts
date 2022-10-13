@@ -3,7 +3,7 @@ import Controller from '../../common/controller'
 import Condicion from '../../common/interfaces/condicion.interface'
 import { Respuesta } from '../../common/interfaces/respuesta.interface'
 import { RespuestaToken } from '../../common/interfaces/respuestaToken.interface'
-import { crearToken, verificarToken } from '../../common/utils/auth.util'
+import { crearToken, obtenerUsuarioId, verificarToken } from '../../common/utils/auth.util'
 import { UsuarioModel } from './usuario.model'
 import * as jwt from 'jsonwebtoken'
 import { Usuario } from '../../common/interfaces/usuario.interface'
@@ -32,11 +32,14 @@ export default class UsuarioController extends Controller {
             if (!usuarioEncontrado || !usuarioEncontrado.hasOwnProperty('usuario_id')) {
                 return noAutenticado
             }
+            console.log(usuarioEncontrado)
             const user: Usuario = {
                 correo,
                 password,
                 rol: usuarioEncontrado.rol,
+                id: usuarioEncontrado.usuario_id,
             }
+
             const token = await crearToken(user, this.#secreto, 300)
             return { message: 'Usuario autenticado', statusCode: 200, token }
         } catch (err) {
@@ -59,7 +62,8 @@ export default class UsuarioController extends Controller {
         if (resultado.statusCode != 500) {
             if (resultado.statusCode === 400) return resultado
             const { correo, password } = req.body
-            const user: Usuario = { correo, password }
+            const id = await obtenerUsuarioId(req)
+            const user: Usuario = { correo, password, id }
             const token = await crearToken(user, this.#secreto, 300)
             response.token = token
         }

@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express'
 import { Ruta } from '../../common/interfaces/ruta.interface'
 import { verificaAutenticacion, verificarToken } from '../../common/middlewares/auth.middleware'
+import { obtenerUsuarioId } from '../../common/utils/auth.util'
 import { atob } from '../../common/utils/crypt.util'
 import { ClienteController } from './cliente.controller'
 
@@ -15,6 +16,8 @@ router.get('/', async (req: Request, res: Response) => {
 })
 
 router.post('/', async (req: Request, res: Response) => {
+    const id = await obtenerUsuarioId(req)
+    console.log(id)
     const response = await controller.agregar(req)
     return res.status(response.statusCode).json(response)
 })

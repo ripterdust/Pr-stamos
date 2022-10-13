@@ -17,7 +17,7 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.post('/', async (req: Request, res: Response) => {
     const id = await obtenerUsuarioId(req)
-    console.log(id)
+    req.body.prestamista_id = id
     const response = await controller.agregar(req)
     return res.status(response.statusCode).json(response)
 })

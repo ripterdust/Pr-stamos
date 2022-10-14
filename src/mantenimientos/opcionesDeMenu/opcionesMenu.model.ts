@@ -34,7 +34,7 @@ export class OpcionesMenuModel extends Model {
             const consulta = pool!.select(this.nombreOpcion).from(this.nombreTabla).where('rol_id', rolId)
             return this.responseHandler(await consulta)
         } catch (err) {
-            console.log('error')
+            console.log(err)
             return this.error(err)
         }
     }

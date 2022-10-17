@@ -289,6 +289,7 @@ export default class Model {
             faltante: 'Campos faltantes o inválidos.',
             noRelacion: 'El campo al que hace referencia no existe',
         }
+        console.log(error.message)
         if (cliente === 'mssql') {
             if (error.number === 2627) return errores.duplicado
             if (error.number === 2601) return errores.duplicado
@@ -305,7 +306,6 @@ export default class Model {
             if (error.errno === 1451) return errores.relacionado
             if (error.errno === 1452) return errores.noRelacion
         }
-        console.log(error.message)
         return 'Error de base de datos desconocido'
     }
 }

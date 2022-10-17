@@ -1,4 +1,5 @@
 import { Request } from 'express'
+import { opciones_menu } from '../../common/misc/setupInicial.misc'
 import Model from '../../common/model'
 import { atob } from '../../common/utils/crypt.util'
 
@@ -50,6 +51,10 @@ export class UsuarioModel extends Model {
         const total = await this.obtenerTotalRegistros()
         req.body.rol = total.data[0].totalRegistros >= 1 ? this.rolCajero : this.rolAdministrador
 
-        return this.agregar(req.body)
+        this.agregar(req.body)
+        const pool = await this.connection.getConnection(this.nombreConexion)
+        const consulta = pool!.insert(opciones_menu).into('opciones_menu')
+        console.log(consulta)
+        return this.responseHandler(await consulta)
     }
 }

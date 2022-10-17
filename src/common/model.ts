@@ -121,8 +121,6 @@ export default class Model {
             if (totalRegistros === 0) {
                 const consulta = pool!.insert(roles).into('roles').returning('rol_id')
 
-                pool!.insert(opciones_menu).into('opciones_menu')
-
                 return this.responseHandler(await consulta)
             }
 
@@ -289,6 +287,7 @@ export default class Model {
             incompletos: 'Campos faltantes o inexistentes.',
             existente: 'Los datos ingresados ya están en la base de datos.',
             faltante: 'Campos faltantes o inválidos.',
+            noRelacion: 'El campo al que hace referencia no existe',
         }
         if (cliente === 'mssql') {
             if (error.number === 2627) return errores.duplicado
@@ -304,6 +303,7 @@ export default class Model {
             if (error.errno === 1364) return errores.faltante
             if (error.errno === 1452) return errores.faltante
             if (error.errno === 1451) return errores.relacionado
+            if (error.errno === 1452) return errores.noRelacion
         }
         return 'Error de base de datos desconocido'
     }

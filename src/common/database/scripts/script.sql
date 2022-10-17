@@ -1,3 +1,6 @@
+#BORRANDO LA DB
+DROP DATABASE prestamos;
+
 #Creando la base de datos
 CREATE DATABASE prestamos;
 

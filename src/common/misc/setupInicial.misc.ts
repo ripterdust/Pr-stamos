@@ -15,7 +15,7 @@ export const roles: Roles[] = [
 export const opciones_menu: OpcionesMenu[] = [
     // Opciones de administrador
     {
-        nombre: 'opciones_menu',
+        nombre: 'Opciones de Menú',
         rol_id: 1,
     },
     {

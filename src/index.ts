@@ -25,7 +25,7 @@ app.use('*', (req: Request, res: Response) => {
         message: 'Recurso no encontrado',
     }
 
-    res.status(404).json(respuesta)
+    res.status(respuesta.statusCode).json(respuesta)
 })
 // Listening
 app.listen(app.get('port'), () => console.log(`App running on port ${app.get('port')}`))

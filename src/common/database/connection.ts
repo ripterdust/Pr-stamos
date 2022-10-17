@@ -1,26 +1,5 @@
 import knex, { Knex } from 'knex'
 import { DB } from '../interfaces/db.interface'
-
-const a = knex({
-    client: 'mysql',
-    connection: {
-        database: 'prestamos',
-        user: 'root',
-        password: 'marlyn2010',
-        host: '127.0.0.1',
-        requestTimeout: 30000,
-        options: {
-            encrypt: false, // Modificar a false si la conexión es local
-        },
-        port: 3306,
-        pool: {
-            min: 1,
-            max: 10,
-            idleTimeoutMillis: 60000,
-        },
-    },
-})
-
 class Connection {
     dbCollection: Record<string, Knex>
     defaultConnectionName = 'DB_PRESTAMOS'

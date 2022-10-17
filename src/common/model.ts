@@ -3,7 +3,7 @@ import { connection } from './database/connection'
 import { Campo } from './interfaces/campo.interface'
 import Condicion from './interfaces/condicion.interface'
 import { Respuesta } from './interfaces/respuesta.interface'
-import { opciones_menu } from './misc/setupInicial.misc'
+import { opciones_menu, roles } from './misc/setupInicial.misc'
 import { parseToJson } from './utils/transform.util'
 
 export default class Model {
@@ -119,7 +119,7 @@ export default class Model {
             const pool = await this.connection.getConnection(this.nombreConexion)
             const { totalRegistros } = parseToJson(await pool!.count('* as totalRegistros').from('roles'))[0]
             if (totalRegistros === 0) {
-                const consulta = pool!.insert().into('roles').returning('rol_id')
+                const consulta = pool!.insert(roles).into('roles').returning('rol_id')
 
                 pool!.insert(opciones_menu).into('opciones_menu')
 

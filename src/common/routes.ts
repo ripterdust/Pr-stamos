@@ -5,6 +5,7 @@ import { usuariosRuta } from '../mantenimientos/usuarios/usuario.router'
 import { clientesRuta } from '../mantenimientos/clientes/cliente.router'
 import { rolesRuta } from '../mantenimientos/roles/rol.router'
 import { opcionesMenuRuta } from '../mantenimientos/opcionesDeMenu/opcionesMenu.router'
+import { monedasRuta } from '../mantenimientos/monedas/monedas.router'
 
 const router = Router()
 const endpoint: string = '/'
@@ -21,4 +22,4 @@ router.get('/', (req: Request, res: Response) => {
     })
 })
 
-export const rutas: Ruta[] = [rutasGenerales, rutaUsuario, usuariosRuta, clientesRuta, rolesRuta, opcionesMenuRuta]
+export const rutas: Ruta[] = [rutasGenerales, rutaUsuario, usuariosRuta, clientesRuta, rolesRuta, opcionesMenuRuta, monedasRuta]

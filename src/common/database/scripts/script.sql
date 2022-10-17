@@ -43,7 +43,7 @@ CREATE TABLE clientes(
 );
 
 # Tablas para mantenimiento de moneda 
-CREATE TABLE mantenimiento_moneda(
+CREATE TABLE monedas(
     moneda_id           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nombre              VARCHAR(15) NOT NULL UNIQUE,
     prefix              VARCHAR(5) NOT NULL UNIQUE

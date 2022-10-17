@@ -38,4 +38,8 @@ export default class Controller {
         const id = parseInt(req.params.id)
         return await this.modelo.actualizarPorId(id, req.body)
     }
+
+    public async obtenerTotalRegistros(req: Request): Promise<Respuesta> {
+        return await this.modelo.obtenerTotalRegistros()
+    }
 }

@@ -20,6 +20,11 @@ router.post('/', async (req: Request, res: Response) => {
     return res.status(response.statusCode).json(response)
 })
 
+router.get('/obtenerTotalRegistros', async (req: Request, res: Response) => {
+    const response = await controller.obtenerTotalRegistros(req)
+    res.status(response.statusCode).json(response)
+})
+
 router.get('/:id', async (req: Request, res: Response) => {
     const response = await controller.obtenerPorId(req)
     return res.status(response.statusCode).json(response)

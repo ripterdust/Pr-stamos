@@ -3,6 +3,8 @@ import Model from '../../common/model'
 import { atob } from '../../common/utils/crypt.util'
 
 export class UsuarioModel extends Model {
+    rolAdministrador: number
+    rolCajero: number
     constructor() {
         super()
         this.nombreTabla = 'usuarios'
@@ -35,6 +37,8 @@ export class UsuarioModel extends Model {
             },
         ]
         this.nombreCampos = this.obtenerCampos()
+        this.rolAdministrador = 1
+        this.rolCajero = 2
     }
 
     public async agregarAutenticar(req: Request) {
@@ -44,7 +48,7 @@ export class UsuarioModel extends Model {
             return respuesta
         }
         const total = await this.obtenerTotalRegistros()
-        req.body.rol = total.data[0].totalRegistros >= 1 ? 2 : 1
+        req.body.rol = total.data[0].totalRegistros >= 1 ? this.rolCajero : this.rolAdministrador
 
         return this.agregar(req.body)
     }

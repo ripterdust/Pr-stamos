@@ -3,6 +3,7 @@ import { connection } from './database/connection'
 import { Campo } from './interfaces/campo.interface'
 import Condicion from './interfaces/condicion.interface'
 import { Respuesta } from './interfaces/respuesta.interface'
+import { opciones_menu } from './misc/setupInicial.misc'
 import { parseToJson } from './utils/transform.util'
 
 export default class Model {
@@ -102,7 +103,11 @@ export default class Model {
 
             const pool = await this.connection.getConnection(this.nombreConexion)
 
-            const resultado = await pool!.update(registro).from(`${this.nombreTabla}`).where(this.idTabla, id).returning(this.nombreCampos)
+            const resultado = await pool!
+                .update(registro)
+                .from(`${this.nombreTabla}`)
+                .where(this.idTabla, id)
+                .returning(this.nombreCampos)
             return this.responseHandler(resultado)
         } catch (err: any) {
             return this.error(err)
@@ -114,10 +119,10 @@ export default class Model {
             const pool = await this.connection.getConnection(this.nombreConexion)
             const { totalRegistros } = parseToJson(await pool!.count('* as totalRegistros').from('roles'))[0]
             if (totalRegistros === 0) {
-                const consulta = pool!
-                    .insert([{ nombre: 'Administrador' }, { nombre: 'Cajero' }])
-                    .into('roles')
-                    .returning('rol_id')
+                const consulta = pool!.insert().into('roles').returning('rol_id')
+
+                pool!.insert(opciones_menu).into('opciones_menu')
+
                 return this.responseHandler(await consulta)
             }
 
@@ -245,7 +250,9 @@ export default class Model {
                     if (!campo.fnValidar(registro[campo.nombre])) {
                         // @ts-ignore
                         validaciones.push({
-                            criterioInvalidez: campo.fnCriterioInvalidez || 'El campo no cumple las condiciones de la función de validadora',
+                            criterioInvalidez:
+                                campo.fnCriterioInvalidez ||
+                                'El campo no cumple las condiciones de la función de validadora',
                             valorEsperado: campo.fnValorEsperado || 'Distinto al actual',
                         })
                     }
@@ -260,7 +267,8 @@ export default class Model {
 
     protected agregarCondiciones(condiciones: Condicion[], consulta: any) {
         condiciones.forEach((condicion) => {
-            if (condicion.operador == 'between') consulta.whereBetween(condicion.campo, [condicion.valor, condicion.valorComparacion])
+            if (condicion.operador == 'between')
+                consulta.whereBetween(condicion.campo, [condicion.valor, condicion.valorComparacion])
             else consulta.where(condicion.campo, condicion.operador || '=', condicion.valor)
         })
         return consulta

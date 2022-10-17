@@ -305,6 +305,7 @@ export default class Model {
             if (error.errno === 1451) return errores.relacionado
             if (error.errno === 1452) return errores.noRelacion
         }
+        console.log(error.message)
         return 'Error de base de datos desconocido'
     }
 }

@@ -1,5 +1,6 @@
 import knex, { Knex } from 'knex'
 import { DB } from '../interfaces/db.interface'
+import {serverConfig} from '../../common/config/serverConfig'
 class Connection {
     dbCollection: Record<string, Knex>
     defaultConnectionName = 'DB_PRESTAMOS'
@@ -7,10 +8,10 @@ class Connection {
         const prestamosDbSettings: DB = {
             client: 'mysql',
             connection: {
-                database: 'prestamos',
-                user: 'root',
-                password: 'marlyn2010',
-                host: '127.0.0.1',
+                database: serverConfig.DB_NAME,
+                user: serverConfig.DB_USER,
+                password: serverConfig.DB_PASS,
+                host: serverConfig.DB_HOST,
                 requestTimeout: 30000,
                 options: {
                     encrypt: false, // Modificar a false si la conexión es local

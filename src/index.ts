@@ -4,12 +4,13 @@ import { rutas } from './common/routes'
 import { Respuesta } from './common/interfaces/respuesta.interface'
 import cors from 'cors'
 import morgan from 'morgan'
+import { serverConfig } from './common/config/serverConfig'
 
 // Initilializations
 const app = express()
 
 // Config
-app.set('port', process.env.PORT || 8000)
+app.set('port', serverConfig.PORT || 8000)
 
 // Middlewares
 app.use(express.json())

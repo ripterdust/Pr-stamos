@@ -1,40 +1,47 @@
-create database prestamos;
+#Creando la base de datos
+CREATE DATABASE prestamos;
 
-use prestamos;
+# Seleccionando la base de datos
+USE prestamos;
 
-create table roles (
-    rol_id                  int not null primary key auto_increment,
-    nombre                  varchar(200) not null unique 
+CREATE TABLE roles (
+    rol_id                  INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    nombre                  VARCHAR(200) NOT NULL UNIQUE 
 );
 
-create table opciones_menu (
-    opcion_id               int not null primary key auto_increment,
-    nombre                  varchar(200) not null,
-    rol_id                  int not null,
+CREATE TABLE opciones_menu (
+    opcion_id               INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    nombre                  VARCHAR(200) NOT NULL,
+    rol_id                  INT NOT NULL,
 
-    foreign key (rol_id) references roles(rol_id)
+    FOREIGN KEY (rol_id) REFERENCES roles(rol_id)
 
 );
 
-create table usuarios(
-    usuario_id          int not null primary key auto_increment,
-    nombre              varchar(200) not null,
-    correo              varchar(200) not null unique,
-    password            varchar(200) not null,
-    rol                 int not null default 1,
+CREATE TABLE usuarios(
+    usuario_id          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    nombre              VARCHAR(200) NOT NULL,
+    correo              VARCHAR(200) NOT NULL UNIQUE,
+    password            VARCHAR(200) NOT NULL,
+    rol                 INT NOT NULL DEFAULT 1,
 
-    foreign key (rol) references roles(rol_id)
+    FOREIGN KEY (rol) REFERENCES roles(rol_id)
 );
 
+CREATE TABLE clientes(
+    cliente_id          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    nombre              VARCHAR(200) NOT NULL,
+    correo              VARCHAR(200) NOT NULL UNIQUE,
+    telefono            VARCHAR(10) NOT NULL, 
+    identificacion      VARCHAR(50) NOT NULL,
+    prestamista_id      INT NOT NULL,
 
+    FOREIGN KEY (prestamista_id) REFERENCES usuarios(usuario_id)
+);
 
-create table clientes(
-    cliente_id          int not null primary key auto_increment,
-    nombre              varchar(200) not null,
-    correo              varchar(200) not null unique,
-    telefono            varchar(10) not null, 
-    identificacion      varchar(50) not null,
-    prestamista_id      int not null,
-
-    foreign key (prestamista_id) references usuarios(usuario_id)
+# Tablas para mantenimiento de moneda 
+CREATE TABLE mantenimiento_moneda(
+    moneda_id           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    nombre              VARCHAR(15) NOT NULL UNIQUE,
+    prefix              VARCHAR(5) NOT NULL UNIQUE
 );

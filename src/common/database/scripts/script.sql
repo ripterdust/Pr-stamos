@@ -37,6 +37,9 @@ CREATE TABLE clientes(
     correo              VARCHAR(200) NOT NULL UNIQUE,
     telefono            VARCHAR(10) NOT NULL, 
     identificacion      VARCHAR(50) NOT NULL,
+    nit                 VARCHAR(15) NOT NULL,
+    fecha_nacimiento    DATETIME NOT NULL,
+    direccion           VARCHAR(200),
     prestamista_id      INT NOT NULL,
 
     FOREIGN KEY (prestamista_id) REFERENCES usuarios(usuario_id)

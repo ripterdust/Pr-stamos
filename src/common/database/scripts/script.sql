@@ -1,16 +1,20 @@
-#BORRANDO LA DB
+-- BORRANDO LA DB
 DROP DATABASE prestamos;
 
-#Creando la base de datos
+-- Creando la base de datos
 CREATE DATABASE prestamos;
 
-# Seleccionando la base de datos
+-- Seleccionando la base de datos
 USE prestamos;
 
+
+-- Roles
 CREATE TABLE roles (
     rol_id                  INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nombre                  VARCHAR(200) NOT NULL UNIQUE 
 );
+
+-- Tabla de las opciones de menú
 
 CREATE TABLE opciones_menu (
     opcion_id               INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -45,9 +49,31 @@ CREATE TABLE clientes(
     FOREIGN KEY (prestamista_id) REFERENCES usuarios(usuario_id)
 );
 
-# Tablas para mantenimiento de moneda 
+-- Tablas para mantenimiento de moneda 
 CREATE TABLE monedas(
     moneda_id           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nombre              VARCHAR(15) NOT NULL UNIQUE,
     prefix              VARCHAR(5) NOT NULL UNIQUE
+);
+
+-- Tablas relacionadas con los préstamos
+CREATE TABLE tipos_prestamos (
+    tipo_id             INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    nombre              VARCHAR(50) NOT NULL,
+    interes             INT NOT NULL
+);
+
+CREATE TABLE prestamos(
+    prestamo_id         INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    fecha_creacion      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    cantidad            DECIMAL(20, 2) NOT NULL,
+    tipo_id             INT NOT NULL,
+
+    FOREIGN KEY (tipo_id) REFERENCES tipos_prestamos(tipo_id)
+);
+
+CREATE TABLE cuotas(
+    cuota_id            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    fecha_pago          DATETIME NOT NULL,
+    pagado              TINYINT(1)              
 );

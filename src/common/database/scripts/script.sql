@@ -67,13 +67,18 @@ CREATE TABLE prestamos(
     prestamo_id         INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     fecha_creacion      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     cantidad            DECIMAL(20, 2) NOT NULL,
+    prestamista_id      INT NOT NULL,
     tipo_id             INT NOT NULL,
-
-    FOREIGN KEY (tipo_id) REFERENCES tipos_prestamos(tipo_id)
+    
+    FOREIGN KEY (tipo_id) REFERENCES tipos_prestamos(tipo_id),
+    FOREIGN KEY (prestamista_id) REFERENCES usuarios(usuario_id)
 );
 
 CREATE TABLE cuotas(
     cuota_id            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     fecha_pago          DATETIME NOT NULL,
-    pagado              TINYINT(1)              
+    pagado              TINYINT(1),
+    prestamo_id         INT NOT NULL,
+
+    FOREIGN KEY(prestamo_id) REFERENCES prestamos(prestamo_id)             
 );

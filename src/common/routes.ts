@@ -7,6 +7,7 @@ import { rolesRuta } from '../mantenimientos/roles/rol.router'
 import { opcionesMenuRuta } from '../mantenimientos/opcionesDeMenu/opcionesMenu.router'
 import { monedasRuta } from '../mantenimientos/monedas/monedas.router'
 import { prestamosRuta } from '../mantenimientos/prestamos/prestamos.router'
+import { cuotasRuta } from '../mantenimientos/coutas/cuotas.router'
 
 const router = Router()
 const endpoint: string = '/'
@@ -32,4 +33,5 @@ export const rutas: Ruta[] = [
     opcionesMenuRuta,
     monedasRuta,
     prestamosRuta,
+    cuotasRuta,
 ]

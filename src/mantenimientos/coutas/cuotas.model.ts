@@ -3,7 +3,7 @@ import Model from '../../common/model'
 export class CuotasModel extends Model {
     constructor() {
         super()
-        this.nombreTabla = 'coutas'
+        this.nombreTabla = 'cuotas'
         this.idTabla = 'cuota_id'
         this.camposTabla = [
             {
@@ -27,5 +27,15 @@ export class CuotasModel extends Model {
                 requerido: true,
             },
         ]
+    }
+
+    public async obtieneCuotasPorPrestamoId(id: number) {
+        try {
+            const pool = await this.connection.getConnection(this.nombreConexion)
+            const consulta = pool!.select('*').from(this.nombreTabla).where('prestamo_id', id)
+            return this.responseHandler(await consulta)
+        } catch (err) {
+            return this.error(err)
+        }
     }
 }

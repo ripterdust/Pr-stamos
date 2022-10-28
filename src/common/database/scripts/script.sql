@@ -68,11 +68,13 @@ CREATE TABLE prestamos(
     fecha_creacion      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     cantidad            DECIMAL(20, 2) NOT NULL,
     prestamista_id      INT NOT NULL,
-    tipo_id             INT NOT NULL,
-    
-    FOREIGN KEY (tipo_id) REFERENCES tipos_prestamos(tipo_id),
-    FOREIGN KEY (prestamista_id) REFERENCES usuarios(usuario_id)
+    cliente_id          INT NOT NULL, 
+    cuotas              INT NOT NULL DEFAULT 12,
+    interes             int not null default 5,
+    FOREIGN KEY (prestamista_id) REFERENCES usuarios(usuario_id),
+    FOREIGN KEY(cliente_id) REFERENCES clientes(cliente_id)
 );
+
 
 CREATE TABLE cuotas(
     cuota_id            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -81,4 +83,24 @@ CREATE TABLE cuotas(
     prestamo_id         INT NOT NULL,
 
     FOREIGN KEY(prestamo_id) REFERENCES prestamos(prestamo_id)             
+);
+
+insert into cuotas(
+    fecha_pago,
+    pagado,
+    prestamo_id
+) values (
+    now(),
+    0,
+    2
+);
+
+insert into prestamos (
+    cantidad,
+    prestamista_id,
+    cliente_id
+) values (
+    100,
+    1, 
+    1
 );

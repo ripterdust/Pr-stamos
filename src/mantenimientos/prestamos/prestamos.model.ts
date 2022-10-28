@@ -26,6 +26,33 @@ export class PrestamosModel extends Model {
                 descripcion: 'Identificador del tipo de préstamo',
                 requerido: true,
             },
+            {
+                nombre: 'cuotas',
+                descripcion: 'Cuotas del préstamo',
+                requerido: true,
+            },
         ]
+    }
+
+    public async obtienePrestamos() {
+        try {
+            const pool = await this.connection.getConnection(this.nombreConexion)
+            const consulta = pool!
+                .select([
+                    'prestamos.prestamo_id',
+                    'clientes.nombre as nombre_cliente',
+                    'prestamos.cuotas',
+                    'prestamos.cantidad',
+                    'prestamos.interes',
+                    'prestamos.fecha_creacion',
+                ])
+                .from(this.nombreTabla)
+                .leftJoin('clientes', `${this.nombreTabla}.cliente_id`, 'clientes.cliente_id')
+                .leftJoin('usuarios', `${this.nombreTabla}.prestamista_id`, 'usuarios.usuario_id')
+
+            return consulta
+        } catch (err) {
+            return this.error(err)
+        }
     }
 }

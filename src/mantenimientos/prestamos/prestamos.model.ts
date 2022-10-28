@@ -45,6 +45,7 @@ export class PrestamosModel extends Model {
                     'prestamos.cantidad',
                     'prestamos.interes',
                     'prestamos.fecha_creacion',
+                    'usuarios.nombre as prestamista',
                 ])
                 .from(this.nombreTabla)
                 .leftJoin('clientes', `${this.nombreTabla}.cliente_id`, 'clientes.cliente_id')

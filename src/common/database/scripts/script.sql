@@ -92,7 +92,7 @@ insert into cuotas(
 ) values (
     now(),
     0,
-    2
+    1
 );
 
 insert into prestamos (

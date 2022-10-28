@@ -81,17 +81,19 @@ CREATE TABLE cuotas(
     fecha_pago          DATETIME NOT NULL,
     pagado              TINYINT(1),
     prestamo_id         INT NOT NULL,
-
+    no_cuota            INT NOT NULL,
     FOREIGN KEY(prestamo_id) REFERENCES prestamos(prestamo_id)             
 );
 
 insert into cuotas(
     fecha_pago,
     pagado,
-    prestamo_id
+    prestamo_id,
+    no_cuota
 ) values (
     now(),
     0,
+    1, 
     1
 );
 

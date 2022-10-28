@@ -26,6 +26,11 @@ export class CuotasModel extends Model {
                 descripcion: 'Identificador del préstamo',
                 requerido: true,
             },
+            {
+                nombre: 'no_cuota',
+                descripcion: 'Número de cuota',
+                requerido: true,
+            },
         ]
     }
 

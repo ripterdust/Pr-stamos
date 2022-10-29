@@ -56,4 +56,25 @@ export class PrestamosModel extends Model {
             return this.error(err)
         }
     }
+
+    public async prestamosRecientes() {
+        try {
+            const pool = await this.connection.getConnection(this.nombreConexion)
+            const consulta = pool!
+                .select([
+                    'clientes.nombre as cliente',
+                    'prestamos.cantidad',
+                    'prestamos.cuotas',
+                    'usuarios.nombre as prestamista',
+                    'prestamos.fecha_creacion',
+                ])
+                .from(this.nombreTabla)
+                .leftJoin('clientes', `${this.nombreTabla}.cliente_id`, 'clientes.cliente_id')
+                .leftJoin('usuarios', `${this.nombreTabla}.prestamista_id`, 'usuarios.usuario_id')
+                .limit(10)
+            return this.responseHandler(await consulta)
+        } catch (err) {
+            return this.error(err)
+        }
+    }
 }

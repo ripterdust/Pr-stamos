@@ -22,6 +22,11 @@ router.get('/todos', async (req: Request, res: Response) => {
     return res.status(response.statusCode).json(response)
 })
 
+router.get('/recientes', async (req: Request, res: Response) => {
+    const response = await controller.obtieneUltimosPrestamos(req)
+    return res.status(response.statusCode).json(response)
+})
+
 router.get('/:id', async (req: Request, res: Response) => {
     const response = await controller.obtenerPorId(req)
     return res.status(response.statusCode).json(response)

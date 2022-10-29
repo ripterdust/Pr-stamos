@@ -17,4 +17,9 @@ export class PrestamosController extends Controller {
             data,
         }
     }
+
+    public async obtieneUltimosPrestamos(req: Request): Promise<Respuesta> {
+        const respuesta = await this.modelo.prestamosRecientes()
+        return respuesta
+    }
 }

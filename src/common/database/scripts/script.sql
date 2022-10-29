@@ -89,26 +89,9 @@ CREATE TABLE cuotas(
     FOREIGN KEY(prestamo_id) REFERENCES prestamos(prestamo_id)             
 );
 
-insert into cuotas(
-    fecha_pago,
-    pagado,
-    prestamo_id,
-    no_cuota,
-    cantidad
-) values (
-    now(),
-    0,
-    1, 
-    1,
-    150.35
-);
-
-insert into prestamos (
-    cantidad,
-    prestamista_id,
-    cliente_id
-) values (
-    100,
-    1, 
-    1
-);
+CREATE TABLE logs (
+    log_id              INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    fecha_creacion      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    tipo                TINYINT(1),
+    cantidad            DECIMAL(20, 2) NOT NULL
+)

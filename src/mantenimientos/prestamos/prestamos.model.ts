@@ -1,5 +1,7 @@
 import Model from '../../common/model'
 import { Request } from 'express'
+import { Cuotas } from '../../common/interfaces/cuotas.interface'
+import { Respuesta } from '../../common/interfaces/respuesta.interface'
 export class PrestamosModel extends Model {
     constructor() {
         super()
@@ -73,10 +75,48 @@ export class PrestamosModel extends Model {
         }
     }
 
-    public async nuevoPrestamo(req: Request) {
+    public async nuevoPrestamo(req: any, noCuotas: number) {
         try {
             const pool = await this.connection.getConnection(this.nombreConexion)
-            return this.agregar(req)
+            const consulta = await this.agregar(req)
+            const idPrestamo: number = consulta.data[0]
+            const { cantidad, interes } = req
+
+            const respuestaCuotas: Respuesta = await this.crearCuotas(cantidad, interes, noCuotas, idPrestamo)
+
+            return respuestaCuotas
+        } catch (err) {
+            return this.error(err)
+        }
+    }
+
+    public async crearCuotas(
+        cantidad: number,
+        interes: number,
+        noCuotas: number = 12,
+        prestamo_id: number
+    ): Promise<Respuesta> {
+        const cuotas: Cuotas[] = []
+        const totalidadPorcentaje = 100
+        const cantidadConInteres = (cantidad / totalidadPorcentaje) * (totalidadPorcentaje + interes)
+        for (let no_cuota = 1; no_cuota <= noCuotas; no_cuota++) {
+            cuotas.push({
+                pagado: false,
+                no_cuota,
+                prestamo_id,
+                fecha_pago: new Date(new Date().setMonth(new Date().getMonth() + no_cuota)),
+                cantidad: cantidadConInteres / noCuotas,
+            })
+        }
+        const consulta = await this.insertarCuotas(cuotas)
+        return consulta
+    }
+
+    public async insertarCuotas(cuotas: Cuotas[]) {
+        try {
+            const pool = await this.connection.getConnection(this.nombreConexion)
+            const consulta = pool!.insert(cuotas).into('cuotas')
+            return this.responseHandler(await consulta)
         } catch (err) {
             return this.error(err)
         }

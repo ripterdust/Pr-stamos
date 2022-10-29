@@ -28,7 +28,7 @@ export class PrestamosController extends Controller {
         const id = await obtenerUsuarioId(req)
         console.log(req.body)
         req.body.prestamista_id = id
-        const respuesta = await this.modelo.nuevoPrestamo(req)
+        const respuesta = await this.modelo.nuevoPrestamo(req.body)
         return respuesta
     }
 }

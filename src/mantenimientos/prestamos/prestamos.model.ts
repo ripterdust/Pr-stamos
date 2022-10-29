@@ -83,7 +83,8 @@ export class PrestamosModel extends Model {
             const { cantidad, interes } = req
 
             const respuestaCuotas: Respuesta = await this.crearCuotas(cantidad, interes, noCuotas, idPrestamo)
-
+            respuestaCuotas.data.pop()
+            respuestaCuotas.data.push(consulta.data[0])
             return respuestaCuotas
         } catch (err) {
             return this.error(err)

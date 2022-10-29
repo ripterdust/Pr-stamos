@@ -1,5 +1,5 @@
 import Model from '../../common/model'
-
+import { Request } from 'express'
 export class PrestamosModel extends Model {
     constructor() {
         super()
@@ -19,11 +19,6 @@ export class PrestamosModel extends Model {
             {
                 nombre: 'cantidad',
                 descripcion: 'Cantidad del préstamo',
-                requerido: true,
-            },
-            {
-                nombre: 'tipo_id',
-                descripcion: 'Identificador del tipo de préstamo',
                 requerido: true,
             },
             {
@@ -73,6 +68,15 @@ export class PrestamosModel extends Model {
                 .leftJoin('usuarios', `${this.nombreTabla}.prestamista_id`, 'usuarios.usuario_id')
                 .limit(10)
             return this.responseHandler(await consulta)
+        } catch (err) {
+            return this.error(err)
+        }
+    }
+
+    public async nuevoPrestamo(req: Request) {
+        try {
+            const pool = await this.connection.getConnection(this.nombreConexion)
+            return this.agregar(req)
         } catch (err) {
             return this.error(err)
         }

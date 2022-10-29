@@ -71,6 +71,9 @@ CREATE TABLE prestamos(
     cliente_id          INT NOT NULL, 
     cuotas              INT NOT NULL DEFAULT 12,
     interes             int not null default 5,
+    moneda_id           int not null,
+
+    FOREIGN KEY (moneda_id) REFERENCES monedas(moneda_id),
     FOREIGN KEY (prestamista_id) REFERENCES usuarios(usuario_id),
     FOREIGN KEY(cliente_id) REFERENCES clientes(cliente_id)
 );

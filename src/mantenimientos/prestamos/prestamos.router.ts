@@ -13,7 +13,7 @@ router.get('/', async (req: Request, res: Response) => {
 })
 
 router.post('/', async (req: Request, res: Response) => {
-    const response = await controller.agregar(req)
+    const response = await controller.nuevoPrestamo(req)
     return res.status(response.statusCode).json(response)
 })
 

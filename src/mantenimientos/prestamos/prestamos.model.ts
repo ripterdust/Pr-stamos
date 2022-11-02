@@ -47,7 +47,7 @@ export class PrestamosModel extends Model {
                 .from(this.nombreTabla)
                 .leftJoin('clientes', `${this.nombreTabla}.cliente_id`, 'clientes.cliente_id')
                 .leftJoin('usuarios', `${this.nombreTabla}.prestamista_id`, 'usuarios.usuario_id')
-
+                .orderBy('prestamos.prestamo_id', 'desc')
             return consulta
         } catch (err) {
             return this.error(err)
@@ -68,7 +68,9 @@ export class PrestamosModel extends Model {
                 .from(this.nombreTabla)
                 .leftJoin('clientes', `${this.nombreTabla}.cliente_id`, 'clientes.cliente_id')
                 .leftJoin('usuarios', `${this.nombreTabla}.prestamista_id`, 'usuarios.usuario_id')
+                .orderBy('prestamos.prestamo_id', 'desc')
                 .limit(10)
+
             return this.responseHandler(await consulta)
         } catch (err) {
             return this.error(err)

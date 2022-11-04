@@ -95,3 +95,10 @@ CREATE TABLE logs (
     tipo                TINYINT(1),
     cantidad            DECIMAL(20, 2) NOT NULL
 )
+
+
+CREATE TABLE config (
+    config_id           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    caja                INT NOT NULL DEFAULT 0,
+    moneda              VARCHAR(5) DEFAULT 'GTQ'
+);

@@ -5,5 +5,7 @@ export class ConfigModel extends Model {
         super()
 
         this.nombreTabla = 'config'
+
+        this.idTabla = 'config_id'
     }
 }

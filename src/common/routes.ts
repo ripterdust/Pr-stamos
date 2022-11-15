@@ -8,8 +8,8 @@ import { opcionesMenuRuta } from '../mantenimientos/opcionesDeMenu/opcionesMenu.
 import { monedasRuta } from '../mantenimientos/monedas/monedas.router'
 import { prestamosRuta } from '../mantenimientos/prestamos/prestamos.router'
 import { cuotasRuta } from '../mantenimientos/coutas/cuotas.router'
-import { configRuta } from '../mantenimientos/config/config.router'
 import { logsRuta } from '../mantenimientos/logs/logs.router'
+import { configRuta } from '../mantenimientos/config/config.router'
 
 const router = Router()
 const endpoint: string = '/'

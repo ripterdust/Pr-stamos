@@ -94,7 +94,7 @@ CREATE TABLE logs (
     fecha_creacion      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     tipo                TINYINT(1),
     cantidad            DECIMAL(20, 2) NOT NULL
-)
+);
 
 
 CREATE TABLE config (

@@ -32,6 +32,9 @@ export class PrestamosController extends Controller {
 
         const respuesta = await this.modelo.nuevoPrestamo(req.body, cuotas)
 
+        if (respuesta.statusCode === 200) {
+            const crearLog = await this.modelo.crearLogs(req.body.cantidad)
+        }
         return respuesta
     }
 }

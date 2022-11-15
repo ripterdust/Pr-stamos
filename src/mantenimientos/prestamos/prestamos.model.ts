@@ -124,4 +124,16 @@ export class PrestamosModel extends Model {
             return this.error(err)
         }
     }
+
+    public async crearLogs(cantidad: number) {
+        try {
+            const pool = await this.connection.getConnection(this.nombreConexion)
+
+            const consulta = pool!.insert({ tipo: 1, cantidad }).into('logs')
+
+            return consulta
+        } catch (err) {
+            return this.error(err)
+        }
+    }
 }

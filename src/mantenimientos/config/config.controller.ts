@@ -18,6 +18,10 @@ export class ConfigController extends Controller {
         const dineroTotal = caja + dinero
 
         const consulta = await this.modelo.actualizarPorId(1, { caja: dineroTotal })
+
+        if (respuesta.statusCode === 200) {
+            const crearLog = await this.modelo.crearLogs(dinero)
+        }
         return consulta
     }
 }

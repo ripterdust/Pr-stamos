@@ -15,4 +15,16 @@ export class ConfigModel extends Model {
 
         console.log(consulta)
     }
+
+    public async crearLogs(dinero: number) {
+        try {
+            const pool = await this.connection.getConnection(this.nombreConexion)
+
+            const consulta = pool!.insert({ tipo: dinero >= 0 ? 4 : 3, cantidad: dinero }).into('logs')
+
+            return consulta
+        } catch (err) {
+            return this.error(err)
+        }
+    }
 }

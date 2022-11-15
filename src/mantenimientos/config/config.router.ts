@@ -1,7 +1,6 @@
-import { Request, Router, Response } from 'express'
+import { Request, Response, Router } from 'express'
 import { Ruta } from '../../common/interfaces/ruta.interface'
-import { verificaAutenticacion } from '../../common/middlewares/auth.middleware'
-import { verificarToken } from '../../common/utils/auth.util'
+import { verificaAutenticacion, verificarToken } from '../../common/middlewares/auth.middleware'
 import { ConfigController } from './config.controller'
 
 const router = Router()
@@ -9,6 +8,7 @@ const endpoint = '/config'
 const controller = new ConfigController()
 
 router.all('*', verificarToken, verificaAutenticacion)
+
 router.get('/', async (req: Request, res: Response) => {
     const response = await controller.obtenerTodos(req)
     res.status(response.statusCode).json(response)

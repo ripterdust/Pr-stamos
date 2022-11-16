@@ -279,6 +279,7 @@ export default class Model {
     }
 
     protected errorSql(error: Record<string, any>, cliente: string): string {
+        console.log(error.message)
         const errores = {
             duplicado: 'No es posible insertar un valor duplicado en la tabla.',
             relacionado: 'No es posible eliminar el registro debido a que hay otros relacionados a este.',

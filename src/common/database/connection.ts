@@ -7,7 +7,7 @@ class Connection {
     constructor() {
         console.log(serverConfig)
         const prestamosDbSettings: DB = {
-            client: 'mysql',
+            client: 'mysql2',
             connection: {
                 database: serverConfig.DB_NAME,
                 user: serverConfig.DB_USER,

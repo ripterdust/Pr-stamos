@@ -18,6 +18,7 @@ const serverConfig_1 = require("../../common/config/serverConfig");
 class Connection {
     constructor() {
         this.defaultConnectionName = 'DB_PRESTAMOS';
+        console.log(serverConfig_1.serverConfig);
         const prestamosDbSettings = {
             client: 'mysql',
             connection: {
@@ -29,7 +30,7 @@ class Connection {
                 options: {
                     encrypt: false, // Modificar a false si la conexión es local
                 },
-                port: 3306,
+                port: serverConfig_1.serverConfig.DB_PORT,
                 pool: {
                     min: 1,
                     max: 10,

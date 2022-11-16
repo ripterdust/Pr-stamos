@@ -7,6 +7,7 @@ interface ServerConfig {
     DB_USER: string
     DB_PASS: string
     DB_HOST: string
+    DB_PORT: number
 }
 
 export const serverConfig: ServerConfig = {
@@ -15,4 +16,5 @@ export const serverConfig: ServerConfig = {
     DB_USER: process.env.DB_USER || '',
     DB_PASS: process.env.DB_PASS || '',
     DB_HOST: process.env.DB_HOST || 'localhost',
+    DB_PORT: parseInt(process.env.DB_PORT || '3306'),
 }
